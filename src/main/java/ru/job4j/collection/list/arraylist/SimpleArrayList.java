@@ -1,4 +1,4 @@
-package ru.job4j.collection;
+package ru.job4j.collection.list.arraylist;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, size);
+        checkIndex(index, size);
         T oldValue = container[index];
         container[index] = newValue;
         return oldValue;
@@ -34,10 +34,10 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, size);
+        checkIndex(index, size);
         T remValue = container[index];
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
-        container[container.length - 1] = null;
+        container[size - 1] = null;
         size--;
         modCount++;
         return remValue;
@@ -45,8 +45,7 @@ public class SimpleArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        Objects.checkIndex(index, size);
-
+        checkIndex(index, size);
         return container[index];
     }
 
@@ -63,6 +62,9 @@ public class SimpleArrayList<T> implements List<T> {
 
             @Override
             public boolean hasNext() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 return point < size;
             }
 
@@ -71,15 +73,17 @@ public class SimpleArrayList<T> implements List<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
                 return container[point++];
             }
         };
     }
 
     private T[] grow() {
-        return Arrays.copyOf(container, container.length * 2);
+        final int newCapacity = container.length == 0 ? 10 : container.length * 2;
+        return Arrays.copyOf(container, newCapacity);
+    }
+
+    private void checkIndex(int index, int length) {
+        Objects.checkIndex(index, length);
     }
 }
