@@ -26,19 +26,19 @@ public class SimpleLinkedList<E> implements List<E> {
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
+        Node<E> x;
         if (index < (size >> 1)) {
-            Node<E> x = first;
+            x = first;
             for (int i = 0; i < index; i++) {
                 x = x.next;
             }
-            return x.item;
         } else {
-            Node<E> x = last;
+            x = last;
             for (int i = size - 1; i > index; i--) {
                 x = x.prev;
             }
-            return x.item;
         }
+        return x.item;
     }
 
     @Override
