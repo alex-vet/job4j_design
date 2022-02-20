@@ -23,7 +23,7 @@ public class ConfigTest {
         Config config = new Config(path);
         config.load();
         assertThat(config.value("name"), is("Alexey Vetoshkin"));
-        assertThat(config.value("surname"), is(Matchers.nullValue()));
+        assertThat(config.value("surname"), is("-"));
     }
 
     @Test

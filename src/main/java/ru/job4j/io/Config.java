@@ -21,17 +21,21 @@ public class Config {
     public void load() throws IllegalArgumentException {
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
             Set<String> val = read.lines()
-                    .filter(line -> !line.trim().equals("") && !line.startsWith("#"))
+                    .filter(line -> !"".equals(line.trim()) && !line.startsWith("#"))
                     .collect(Collectors.toSet());
             for (String str : val) {
                 String[] strVal = str.split("=");
-                if (strVal[0].trim().equals("")) {
-                    throw new IllegalArgumentException();
-                }
-                values.put(strVal[0], strVal.length == 2 ? strVal[1] : null);
+                checkLine(strVal);
+                values.put(strVal[0], strVal[1]);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkLine(String[] line) throws IllegalArgumentException {
+        if (line.length < 2 || "".equals(line[0].trim())) {
+            throw new IllegalArgumentException();
         }
     }
 
