@@ -13,6 +13,9 @@ public class Search {
             throw new IllegalArgumentException("Not valid arguments. Usage java -jar search.jar ROOT_FOLDER FILE_EXTENSION.");
         }
         Path start = Paths.get(args[0]);
+        if (!start.toFile().exists() || !start.toFile().isDirectory()) {
+            throw new IllegalArgumentException("Not valid arguments. Root folder is not valid.");
+        }
         search(start, p -> p.toFile().getName().endsWith("." + args[1])).forEach(System.out::println);
     }
 
