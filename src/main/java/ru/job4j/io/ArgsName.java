@@ -14,22 +14,24 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
+        validateArgs(args);
+        values = Arrays.stream(args)
+                .map(el -> el.substring(1).split("=", 2))
+                .collect(Collectors.toMap(k -> k[0], v -> v[1]));
+    }
+
+    private void validateArgs(String[] args) {
         if (args.length == 0) {
             throw new IllegalArgumentException("Wrong args");
-        } else {
-            values = Arrays.stream(args)
-                    .peek(el -> {
-                        if (el.indexOf("-") != 0) {
-                            throw new IllegalArgumentException("Args must start from -");
-                        }
-                    })
-                    .map(el -> el.substring(1).split("=", 2))
-                    .peek(el -> {
-                        if (el.length != 2 || "".equals(el[0]) || "".equals(el[1])) {
-                            throw new IllegalArgumentException("Args must be like '-SOME_NAME=SOME_VALUE'");
-                        }
-                    })
-                    .collect(Collectors.toMap(k -> k[0], v -> v[1]));
+        }
+        for (String arg : args) {
+            if (arg.indexOf("-") != 0) {
+                throw new IllegalArgumentException("Args must start from -");
+            }
+            String[] el = arg.substring(1).split("=", 2);
+            if (el.length != 2 || "".equals(el[0]) || "".equals(el[1])) {
+                throw new IllegalArgumentException("Args must be like '-SOME_NAME=SOME_VALUE'");
+            }
         }
     }
 
