@@ -16,7 +16,10 @@ public class Search {
         if (!start.toFile().exists() || !start.toFile().isDirectory()) {
             throw new IllegalArgumentException("Not valid arguments. Root folder is not valid.");
         }
-        search(start, p -> p.toFile().getName().endsWith("." + args[1])).forEach(System.out::println);
+        if (!args[1].startsWith(".")) {
+            throw new IllegalArgumentException("Not valid arguments. File extension is not valid.");
+        }
+        search(start, p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
