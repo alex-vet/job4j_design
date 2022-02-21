@@ -10,6 +10,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
+    String dir, exclude, out;
 
     public void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
@@ -24,24 +25,15 @@ public class Zip {
         }
     }
 
-    public void packSingleFile(File source, File target) {
-        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            zip.putNextEntry(new ZipEntry(source.getPath()));
-            try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
-                zip.write(out.readAllBytes());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
+    private void validateArgs(String[] args) {
         String errArgs = "Wrong args. Usage: java -jar pack.jar -d=ROOT_DIRECTORY -e=EXCLUDED_FILE_EXTENSION -o=OUTPUT_FILE_NAME";
         if (args.length != 3) {
             throw new IllegalArgumentException(errArgs);
         }
         ArgsName arg = ArgsName.of(args);
-        String dir = arg.get("d"), exclude = arg.get("e"), out = arg.get("o");
+        dir = arg.get("d");
+        exclude = arg.get("e");
+        out = arg.get("o");
         if (dir == null || exclude == null || out == null) {
             throw new IllegalArgumentException(errArgs);
         }
@@ -49,8 +41,12 @@ public class Zip {
         if (!rootDir.toFile().exists() || !rootDir.toFile().isDirectory()) {
             throw new IllegalArgumentException("Not valid arguments. Root directory is not valid.");
         }
-        List<Path> listFiles = Search.search(rootDir, path -> !path.toFile().getName().endsWith(exclude));
+    }
+
+    public static void main(String[] args) throws IOException {
         Zip zip = new Zip();
-        zip.packFiles(listFiles, new File(out));
+        zip.validateArgs(args);
+        List<Path> listFiles = Search.search(Paths.get(zip.dir), path -> !path.toFile().getName().endsWith(zip.exclude));
+        zip.packFiles(listFiles, new File(zip.out));
     }
 }
