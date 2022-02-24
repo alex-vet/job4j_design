@@ -30,15 +30,15 @@ public class ConsoleChat {
         System.out.println("Добро пожаловать. Отправь сообщение для начала общения." + System.lineSeparator()
                 + "Доступны команды: стоп, закончить, продолжить.");
         Scanner in = new Scanner(System.in);
-        while (!input.equals(STOP)) {
+        while (!OUT.equals(input)) {
             input = in.nextLine();
             log.add(input + System.lineSeparator());
-            if (CONTINUE.equals(input) || (!OUT.equals(input) && !STOP.equals(input)) && !command.equals(OUT)) {
+            if (CONTINUE.equals(input) || (!OUT.equals(input) && !STOP.equals(input)) && !STOP.equals(command)) {
                 answer = phrases.get(rand.nextInt(0, phrases.size()));
                 log.add(answer + System.lineSeparator());
                 System.out.println(answer);
             }
-            if (OUT.equals(input) || CONTINUE.equals(input)) {
+            if (STOP.equals(input) || CONTINUE.equals(input)) {
                 command = input;
             }
         }
