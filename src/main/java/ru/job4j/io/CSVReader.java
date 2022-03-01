@@ -1,6 +1,8 @@
 package ru.job4j.io;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -11,7 +13,6 @@ public class CSVReader {
         CSVReader csv = new CSVReader();
         csv.checkArgs(argsName);
         Path source = Paths.get(argsName.get("path"));
-        String data = csv.readFile(source);
         String[] filter = argsName.get("filter").split(",");
         int[] index = new int[filter.length];
         StringJoiner sj = new StringJoiner("");
@@ -53,16 +54,6 @@ public class CSVReader {
                 throw new IllegalArgumentException("Argument -out not valid.");
             }
         }
-    }
-
-    private String readFile(Path source) {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader in = new BufferedReader(new FileReader(source.toFile().getAbsolutePath()))) {
-            sb.append(in.lines());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
     }
 
     private void printResult(String result, String target) {
