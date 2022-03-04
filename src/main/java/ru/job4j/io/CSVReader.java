@@ -10,8 +10,7 @@ import java.util.StringJoiner;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) throws Exception {
-        CSVReader csv = new CSVReader();
-        csv.checkArgs(argsName);
+        checkArgs(argsName);
         Path source = Paths.get(argsName.get("path"));
         String[] filter = argsName.get("filter").split(",");
         int[] index = new int[filter.length];
@@ -37,10 +36,10 @@ public class CSVReader {
                 sj.add(System.lineSeparator());
             }
         }
-        csv.printResult(sj.toString(), argsName.get("out"));
+        printResult(sj.toString(), argsName.get("out"));
     }
 
-    private void checkArgs(ArgsName args) {
+    private static void checkArgs(ArgsName args) {
         Path source = Paths.get(args.get("path"));
         if (!source.toFile().exists() || !source.toFile().isFile()) {
             throw new IllegalArgumentException("Path not valid or not exist.");
@@ -50,13 +49,13 @@ public class CSVReader {
         }
         if (!"stdout".equals(args.get("out"))) {
             Path target = Paths.get(args.get("out"));
-            if (!target.toFile().isFile()) {
+            if (!target.getParent().getFileName().toFile().exists()) {
                 throw new IllegalArgumentException("Argument -out not valid.");
             }
         }
     }
 
-    private void printResult(String result, String target) {
+    private static void printResult(String result, String target) {
         if ("stdout".equals(target)) {
             System.out.println(result);
         } else {
@@ -66,5 +65,10 @@ public class CSVReader {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        ArgsName arg = ArgsName.of(args);
+        handle(arg);
     }
 }
