@@ -49,7 +49,7 @@ public class CSVReader {
         }
         if (!"stdout".equals(args.get("out"))) {
             Path target = Paths.get(args.get("out"));
-            if (!target.getParent().getFileName().toFile().exists()) {
+            if (!target.getParent().toFile().exists()) {
                 throw new IllegalArgumentException("Argument -out not valid.");
             }
         }
