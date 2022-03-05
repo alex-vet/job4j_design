@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -47,19 +48,18 @@ public class CSVReader {
         if (args.get("delimiter") == null) {
             throw new IllegalArgumentException("Delimiter must be defined.");
         }
-        if (!"stdout".equals(args.get("out"))) {
-            Path target = Paths.get(args.get("out"));
-            if (!target.getParent().toFile().exists()) {
-                throw new IllegalArgumentException("Argument -out not valid.");
-            }
-        }
     }
 
     private static void printResult(String result, String target) {
         if ("stdout".equals(target)) {
             System.out.println(result);
         } else {
-            try (PrintWriter out = new PrintWriter(new FileWriter(target))) {
+            File dir = new File(target);
+            if (dir.getParentFile() == null) {
+                dir = new File(".\\" + target);
+            }
+            dir.getParentFile().mkdir();
+            try (PrintWriter out = new PrintWriter(new FileWriter(dir.getAbsoluteFile()))) {
                 out.write(result);
             } catch (IOException e) {
                 e.printStackTrace();
