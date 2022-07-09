@@ -46,14 +46,5 @@ public class Book {
         xmlGenres.append("    </genres>");
         return xmlGenres.toString();
     }
-
-    //<?xml version="1.1" encoding="UTF-8" ?>
-    //<person sex="false" age="30">
-    //    <contact phone="11-111"/>
-    //    <statuses>
-    //        <status>Worker</status>
-    //        <status>Married</status>
-    //    </statuses>
-    //</person>
 }
 
