@@ -17,6 +17,26 @@ public class Book {
         this.genres = genres;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public String[] getGenres() {
+        return genres;
+    }
+
     @Override
     public String toString() {
         return "Book{"
