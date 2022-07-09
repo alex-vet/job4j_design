@@ -1,13 +1,27 @@
 package ru.job4j.serialization.xml;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.*;
+import java.io.StringWriter;
 import java.util.Arrays;
 
+@XmlRootElement(name = "book")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Book {
-    private final String name;
-    private final int pageCount;
-    private final boolean read;
-    private final Publisher publisher;
-    private final String[] genres;
+    @XmlAttribute
+    private String name;
+    @XmlAttribute
+    private int pageCount;
+    @XmlAttribute
+    private boolean read;
+    private Publisher publisher;
+    @XmlElementWrapper(name = "genres")
+    @XmlElement(name = "genre")
+    private String[] genres;
+
+    public Book() {
+    }
 
     public Book(String name, int pageCount, boolean read, Publisher publisher, String[] genres) {
         this.name = name;
@@ -28,23 +42,21 @@ public class Book {
                 + '}';
     }
 
-    public String toXMLString() {
-        return "<?xml version=\"1.1\" encoding=\"UTF-8\" ?>" + System.lineSeparator()
-                + "<book name=\"" + name + "\" pageCount=\"" + pageCount + "\""
-                + " read=\"" + read + "\">" + System.lineSeparator()
-                + "    " + publisher.toXMLString() + System.lineSeparator()
-                + genresToXMLString() + System.lineSeparator()
-                + "</book>";
+    public static void main(String[] args) throws Exception {
+
+        final Book book = new Book("Alice's Adventures in Wonderland", 96, false, new Publisher("АСТ"),
+                new String[]{"Fiction", "Fantasy"});
+
+        JAXBContext context = JAXBContext.newInstance(Book.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        try (StringWriter writer = new StringWriter()) {
+            marshaller.marshal(book, writer);
+            String result = writer.getBuffer().toString();
+            System.out.println(result);
+        }
     }
 
-    private String genresToXMLString() {
-        StringBuilder xmlGenres = new StringBuilder();
-        xmlGenres.append("    <genres>").append(System.lineSeparator());
-        for (String genre : genres) {
-            xmlGenres.append("        <genre>").append(genre).append("</genre>").append(System.lineSeparator());
-        }
-        xmlGenres.append("    </genres>");
-        return xmlGenres.toString();
-    }
 }
 

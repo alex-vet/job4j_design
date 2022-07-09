@@ -1,7 +1,16 @@
 package ru.job4j.serialization.xml;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "publisher")
 public class Publisher {
-    private final String name;
+
+    @XmlAttribute
+    private String name;
+
+    public Publisher() {
+    }
 
     public Publisher(String name) {
         this.name = name;
