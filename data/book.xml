@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<book name="Alice's Adventures in Wonderland" pageCount="96" read="false">
+    <publisher name="АСТ"/>
+    <genres>
+        <genre>Fiction</genre>
+        <genre>Fantasy</genre>
+    </genres>
+</book>
