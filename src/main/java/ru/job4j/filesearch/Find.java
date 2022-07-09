@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Find {
-    String dir, type, out, name;
+    private String dir, type, out, name;
 
     public static void main(String[] args) throws IOException {
         Find find = new Find();
@@ -33,7 +33,7 @@ public class Find {
         }
     }
 
-    public List<Path> search(Path root, String condition) throws IOException {
+    private List<Path> search(Path root, String condition) throws IOException {
         SearchFiles searcher = new SearchFiles(condition, type);
         Files.walkFileTree(root, searcher);
         return searcher.getMatchedPaths();
@@ -45,7 +45,7 @@ public class Find {
         if (args.length != 4) {
             throw new IllegalArgumentException(errArgs);
         }
-        ru.job4j.io.ArgsName arg = ArgsName.of(args);
+        ArgsName arg = ArgsName.of(args);
         /*-d - директория, в которой начинать поиск.
         -n - имя файла, маска, либо регулярное выражение.
         -t - тип поиска: mask искать по маске, name по полному совпадение имени, regex по регулярному выражению.
