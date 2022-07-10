@@ -13,13 +13,6 @@ create table genre (
     name varchar(255)
 );
 
---many-to-many
-create table genres_books (
-    id serial primary key,
-	genre_id integer references genre(id),
-	book_id integer references book(id)
-);
-
 --many-to-one by publisher_id column
 --one-to-one by isbn_id column
 create table book (
@@ -29,4 +22,11 @@ create table book (
 	read boolean,
 	publisher_id integer references publisher(id),
 	isbn_id integer references isbn(id) unique
+);
+
+--many-to-many
+create table genres_books (
+    id serial primary key,
+	genre_id integer references genre(id),
+	book_id integer references book(id)
 );
