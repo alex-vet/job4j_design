@@ -1,16 +1,16 @@
 create table publisher (
     id serial primary key,
-    name varchar(255),
+    name varchar(255)
 );
 
 create table isbn (
     id serial primary key,
-    name varchar(255),
+    name varchar(255)
 );
 
 create table genre (
     id serial primary key,
-    name varchar(255),
+    name varchar(255)
 );
 
 --many-to-many
