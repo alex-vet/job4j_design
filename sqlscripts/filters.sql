@@ -26,46 +26,46 @@ SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_da
   FROM product AS p
  	   INNER JOIN type AS t
  	   ON p.type_id = t.id
- WHERE t.name = 'СЫР'
+ WHERE t.name = 'СЫР';
 
 SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_date as "Срок годности", price as Цена
   FROM product AS p
  	   INNER JOIN type AS t
  	   ON p.type_id = t.id
- WHERE p.name like '%ороженное%'
+ WHERE p.name like '%ороженное%';
 
 SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_date as "Срок годности", price as Цена
   FROM product AS p
  	   INNER JOIN type AS t
  	   ON p.type_id = t.id
- WHERE expired_date < current_date
+ WHERE expired_date < current_date;
 
 SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_date as "Срок годности", price as Цена
   FROM product AS p
  	   INNER JOIN type AS t
  	   ON p.type_id = t.id
- WHERE p.price = (SELECT MAX(price) from product)
+ WHERE p.price = (SELECT MAX(price) from product);
+
+SELECT t.name AS "Тип продукта", COUNT(*) as Количество
+  FROM product AS p
+ 	   INNER JOIN type AS t
+ 	   ON p.type_id = t.id
+ GROUP BY t.name;
+
+SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_date as "Срок годности", price as Цена
+  FROM product AS p
+ 	   INNER JOIN type AS t
+ 	   ON p.type_id = t.id
+ WHERE t.name IN ('СЫР', 'МОЛОКО');
 
 SELECT t.name AS "Тип продукта", COUNT(*) as Количество
   FROM product AS p
  	   INNER JOIN type AS t
  	   ON p.type_id = t.id
  GROUP BY t.name
+HAVING COUNT(*) < 10;
 
 SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_date as "Срок годности", price as Цена
   FROM product AS p
  	   INNER JOIN type AS t
- 	   ON p.type_id = t.id
- WHERE t.name IN ('СЫР', 'МОЛОКО')
-
-SELECT t.name AS "Тип продукта", COUNT(*) as Количество
-  FROM product AS p
- 	   INNER JOIN type AS t
- 	   ON p.type_id = t.id
- GROUP BY t.name
-HAVING COUNT(*) < 10
-
-SELECT p.name AS Продукт, t.name AS "Тип продукта", expired_date as "Срок годности", price as Цена
-  FROM product AS p
- 	   INNER JOIN type AS t
- 	   ON p.type_id = t.id
+ 	   ON p.type_id = t.id;
