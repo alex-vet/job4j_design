@@ -22,16 +22,16 @@ insert into book(name, publisher_id) values ('Our Time Is Now', 3);
 SELECT b.name AS Название, p.name AS Издатель
   FROM book AS b
  INNER JOIN publisher AS p
- 	   ON b.publisher_id = p.id
+ 	   ON b.publisher_id = p.id;
 
 SELECT b.name AS Название, p.name AS Издатель
   FROM book AS b
  INNER JOIN publisher AS p
  	   ON b.publisher_id = p.id
- WHERE b.id > 1
+ WHERE b.id > 1;
 
 SELECT b.name AS Название, p.name AS Издатель
   FROM book AS b
  INNER JOIN publisher AS p
  	   ON b.publisher_id = p.id
- WHERE p.id = 3
+ WHERE p.id = 3;
