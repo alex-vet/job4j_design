@@ -1,6 +1,5 @@
 package ru.job4j.jdbc;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -113,11 +112,7 @@ public class TableEditor implements AutoCloseable {
     public static void main(String[] args) throws Exception {
         Properties config = new Properties();
         try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("jdbc.properties")) {
-            if (in != null) {
                 config.load(in);
-            } else {
-                throw new IOException("File jdbc.properties not found.");
-            }
         }
         TableEditor tableEditor = new TableEditor(config);
         tableEditor.createTable("demo");
