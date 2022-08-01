@@ -15,21 +15,17 @@ public class TableEditor implements AutoCloseable {
 
     private Properties properties;
 
-    public TableEditor(Properties properties) {
+    public TableEditor(Properties properties) throws Exception {
         this.properties = properties;
         initConnection();
     }
 
-    private void initConnection() {
-        try {
+    private void initConnection() throws Exception {
             Class.forName(properties.getProperty("jdbc.connection.driver_class"));
             String url = properties.getProperty("jdbc.connection.url");
             String login = properties.getProperty("jdbc.connection.username");
             String password = properties.getProperty("jdbc.connection.password");
             connection = DriverManager.getConnection(url, login, password);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void executeSQL(String sql) {
@@ -41,13 +37,13 @@ public class TableEditor implements AutoCloseable {
     }
 
     public void createTable(String tableName) {
-            String sql = String.format(
-                    "create table if not exists %s(%s, %s);",
-                    tableName,
-                    "id serial primary key",
-                    "name text"
-            );
-            executeSQL(sql);
+        String sql = String.format(
+                "create table if not exists %s(%s, %s);",
+                tableName,
+                "id serial primary key",
+                "name text"
+        );
+        executeSQL(sql);
     }
 
     public void dropTable(String tableName) {
@@ -114,7 +110,7 @@ public class TableEditor implements AutoCloseable {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Properties config = new Properties();
         try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("jdbc.properties")) {
             if (in != null) {
@@ -122,23 +118,18 @@ public class TableEditor implements AutoCloseable {
             } else {
                 throw new IOException("File jdbc.properties not found.");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        try {
-            TableEditor tableEditor = new TableEditor(config);
-            tableEditor.createTable("demo");
-            System.out.println(getTableScheme(tableEditor.connection, "demo"));
-            tableEditor.addColumn("demo", "demo_type", "integer");
-            System.out.println(getTableScheme(tableEditor.connection, "demo"));
-            tableEditor.renameColumn("demo", "demo_type", "demo");
-            System.out.println(getTableScheme(tableEditor.connection, "demo"));
-            tableEditor.dropColumn("demo", "demo");
-            System.out.println(getTableScheme(tableEditor.connection, "demo"));
-            tableEditor.dropTable("demo");
-            System.out.println(getTableScheme(tableEditor.connection, "demo"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        TableEditor tableEditor = new TableEditor(config);
+        tableEditor.createTable("demo");
+        System.out.println(getTableScheme(tableEditor.connection, "demo"));
+        tableEditor.addColumn("demo", "demo_type", "integer");
+        System.out.println(getTableScheme(tableEditor.connection, "demo"));
+        tableEditor.renameColumn("demo", "demo_type", "demo");
+        System.out.println(getTableScheme(tableEditor.connection, "demo"));
+        tableEditor.dropColumn("demo", "demo");
+        System.out.println(getTableScheme(tableEditor.connection, "demo"));
+        tableEditor.dropTable("demo");
+        System.out.println(getTableScheme(tableEditor.connection, "demo"));
+        tableEditor.close();
     }
 }
